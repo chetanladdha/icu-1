@@ -83,7 +83,7 @@ const UFormattedNumberRangeData* number::impl::validateUFormattedNumberRange(
 
 U_CAPI UNumberRangeFormatter* U_EXPORT2
 unumrf_openForSkeletonWithCollapseAndIdentityFallback(
-        const UChar* skeleton,
+        const char16_t* skeleton,
         int32_t skeletonLen,
         UNumberRangeCollapse collapse,
         UNumberRangeIdentityFallback identityFallback,
@@ -115,7 +115,9 @@ unumrf_formatDoubleRange(
     auto* result = UFormattedNumberRangeApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
-    result->fData.getStringRef().clear();
+    result->fData.resetString();
+    result->fData.quantity1.clear();
+    result->fData.quantity2.clear();
     result->fData.quantity1.setToDouble(first);
     result->fData.quantity2.setToDouble(second);
     formatter->fFormatter.formatImpl(result->fData, first == second, *ec);
@@ -132,7 +134,9 @@ unumrf_formatDecimalRange(
     auto* result = UFormattedNumberRangeApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
-    result->fData.getStringRef().clear();
+    result->fData.resetString();
+    result->fData.quantity1.clear();
+    result->fData.quantity2.clear();
     result->fData.quantity1.setToDecNumber({first, firstLen}, *ec);
     result->fData.quantity2.setToDecNumber({second, secondLen}, *ec);
     formatter->fFormatter.formatImpl(result->fData, first == second, *ec);

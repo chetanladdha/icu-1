@@ -3,14 +3,45 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sr_Cyrl_BA{
     units{
+        compound{
+            1024p8{"јоби{0}"}
+        }
         duration{
             century{
+                case{
+                    accusative{
+                        few{"{0} вијека"}
+                        other{"{0} вијекова"}
+                    }
+                    genitive{
+                        few{"{0} вијека"}
+                        other{"{0} вијекова"}
+                    }
+                    instrumental{
+                        few{"{0} вијека"}
+                        other{"{0} вијекова"}
+                    }
+                }
                 dnam{"вијекови"}
                 few{"{0} вијека"}
                 one{"{0} вијек"}
                 other{"{0} вијекова"}
             }
             month{
+                case{
+                    accusative{
+                        few{"{0} мјесеца"}
+                        other{"{0} мјесеци"}
+                    }
+                    genitive{
+                        few{"{0} мјесеца"}
+                        other{"{0} мјесеци"}
+                    }
+                    instrumental{
+                        few{"{0} мјесеца"}
+                        other{"{0} мјесеци"}
+                    }
+                }
                 dnam{"мјесеци"}
                 few{"{0} мјесеца"}
                 one{"{0} мјесец"}
@@ -18,6 +49,20 @@ sr_Cyrl_BA{
                 per{"{0} мјесечно"}
             }
             week{
+                case{
+                    accusative{
+                        few{"{0} недјеље"}
+                        other{"{0} недјеља"}
+                    }
+                    genitive{
+                        few{"{0} недјеље"}
+                        other{"{0} недјеља"}
+                    }
+                    instrumental{
+                        few{"{0} недјеље"}
+                        other{"{0} недјеља"}
+                    }
+                }
                 dnam{"недјеље"}
                 few{"{0} недјеље"}
                 one{"{0} недјеља"}
@@ -43,9 +88,21 @@ sr_Cyrl_BA{
         }
     }
     unitsNarrow{
+        length{
+            light-year{
+                dnam{"свјетлосне год."}
+            }
+        }
+        mass{
+            grain{
+                dnam{"гран"}
+                few{"{0} грана"}
+                one{"{0} гран"}
+                other{"{0} гранова"}
+            }
+        }
         volume{
             barrel{
-                dnam{"bbl"}
                 few{"{0} bbl"}
                 one{"{0}bbl"}
                 other{"{0}bbl"}

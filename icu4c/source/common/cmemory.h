@@ -37,19 +37,57 @@
 #include <stdio.h>
 #endif
 
-
+// uprv_memcpy and uprv_memmove
+#if defined(__clang__)
+#define uprv_memcpy(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    /* Suppress warnings about addresses that will never be NULL */ \
+    _Pragma("clang diagnostic push") \
+    _Pragma("clang diagnostic ignored \"-Waddress\"") \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    _Pragma("clang diagnostic pop") \
+    U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+#define uprv_memmove(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    /* Suppress warnings about addresses that will never be NULL */ \
+    _Pragma("clang diagnostic push") \
+    _Pragma("clang diagnostic ignored \"-Waddress\"") \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    _Pragma("clang diagnostic pop") \
+    U_STANDARD_CPP_NAMESPACE memmove(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+#elif defined(__GNUC__)
+#define uprv_memcpy(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    /* Suppress warnings about addresses that will never be NULL */ \
+    _Pragma("GCC diagnostic push") \
+    _Pragma("GCC diagnostic ignored \"-Waddress\"") \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    _Pragma("GCC diagnostic pop") \
+    U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+#define uprv_memmove(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    /* Suppress warnings about addresses that will never be NULL */ \
+    _Pragma("GCC diagnostic push") \
+    _Pragma("GCC diagnostic ignored \"-Waddress\"") \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    _Pragma("GCC diagnostic pop") \
+    U_STANDARD_CPP_NAMESPACE memmove(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+#else
 #define uprv_memcpy(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
     U_ASSERT(dst != NULL); \
     U_ASSERT(src != NULL); \
     U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size); \
 } UPRV_BLOCK_MACRO_END
-
 #define uprv_memmove(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
     U_ASSERT(dst != NULL); \
     U_ASSERT(src != NULL); \
     U_STANDARD_CPP_NAMESPACE memmove(dst, src, size); \
 } UPRV_BLOCK_MACRO_END
-
+#endif
 
 /**
  * \def UPRV_LENGTHOF
@@ -154,13 +192,13 @@ public:
      * Constructor takes ownership.
      * @param p simple pointer to an array of T items that is adopted
      */
-    explicit LocalMemory(T *p=NULL) : LocalPointerBase<T>(p) {}
+    explicit LocalMemory(T *p=nullptr) : LocalPointerBase<T>(p) {}
     /**
      * Move constructor, leaves src with isNull().
      * @param src source smart pointer
      */
     LocalMemory(LocalMemory<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
-        src.ptr=NULL;
+        src.ptr=nullptr;
     }
     /**
      * Destructor deletes the memory it owns.
@@ -177,7 +215,7 @@ public:
     LocalMemory<T> &operator=(LocalMemory<T> &&src) U_NOEXCEPT {
         uprv_free(LocalPointerBase<T>::ptr);
         LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=NULL;
+        src.ptr=nullptr;
         return *this;
     }
     /**
@@ -210,21 +248,21 @@ public:
      * Deletes the array it owns, allocates a new one and reset its bytes to 0.
      * Returns the new array pointer.
      * If the allocation fails, then the current array is unchanged and
-     * this method returns NULL.
+     * this method returns nullptr.
      * @param newCapacity must be >0
-     * @return the allocated array pointer, or NULL if the allocation failed
+     * @return the allocated array pointer, or nullptr if the allocation failed
      */
     inline T *allocateInsteadAndReset(int32_t newCapacity=1);
     /**
      * Deletes the array it owns and allocates a new one, copying length T items.
      * Returns the new array pointer.
      * If the allocation fails, then the current array is unchanged and
-     * this method returns NULL.
+     * this method returns nullptr.
      * @param newCapacity must be >0
      * @param length number of T items to be copied from the old array to the new one;
      *               must be no more than the capacity of the old array,
      *               which the caller must track because the LocalMemory does not track it
-     * @return the allocated array pointer, or NULL if the allocation failed
+     * @return the allocated array pointer, or nullptr if the allocation failed
      */
     inline T *allocateInsteadAndCopy(int32_t newCapacity=1, int32_t length=0);
     /**
@@ -240,14 +278,14 @@ template<typename T>
 inline T *LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) {
     if(newCapacity>0) {
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
-        if(p!=NULL) {
+        if(p!=nullptr) {
             uprv_memset(p, 0, newCapacity*sizeof(T));
             uprv_free(LocalPointerBase<T>::ptr);
             LocalPointerBase<T>::ptr=p;
         }
         return p;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -256,7 +294,7 @@ template<typename T>
 inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t length) {
     if(newCapacity>0) {
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
-        if(p!=NULL) {
+        if(p!=nullptr) {
             if(length>0) {
                 if(length>newCapacity) {
                     length=newCapacity;
@@ -268,7 +306,7 @@ inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t le
         }
         return p;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -365,11 +403,11 @@ public:
     /**
      * Deletes the array (if owned) and aliases another one, no transfer of ownership.
      * If the arguments are illegal, then the current array is unchanged.
-     * @param otherArray must not be NULL
+     * @param otherArray must not be nullptr
      * @param otherCapacity must be >0
      */
     void aliasInstead(T *otherArray, int32_t otherCapacity) {
-        if(otherArray!=NULL && otherCapacity>0) {
+        if(otherArray!=nullptr && otherCapacity>0) {
             releaseArray();
             ptr=otherArray;
             capacity=otherCapacity;
@@ -380,17 +418,17 @@ public:
      * Deletes the array (if owned) and allocates a new one, copying length T items.
      * Returns the new array pointer.
      * If the allocation fails, then the current array is unchanged and
-     * this method returns NULL.
+     * this method returns nullptr.
      * @param newCapacity can be less than or greater than the current capacity;
      *                    must be >0
      * @param length number of T items to be copied from the old array to the new one
-     * @return the allocated array pointer, or NULL if the allocation failed
+     * @return the allocated array pointer, or nullptr if the allocation failed
      */
     inline T *resize(int32_t newCapacity, int32_t length=0);
     /**
      * Gives up ownership of the array if owned, or else clones it,
      * copying length T items; resets itself to the internal stack array.
-     * Returns NULL if the allocation failed.
+     * Returns nullptr if the allocation failed.
      * @param length number of T items to copy when cloning,
      *        and capacity of the clone when cloning
      * @param resultCapacity will be set to the returned array's capacity (output-only)
@@ -405,7 +443,7 @@ protected:
         if (U_FAILURE(status)) {
             return;
         }
-        if (this->resize(src.capacity, 0) == NULL) {
+        if (this->resize(src.capacity, 0) == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -470,7 +508,7 @@ inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t
         ::fprintf(::stderr, "MaybeStackArray (resize) alloc %d * %lu\n", newCapacity, sizeof(T));
 #endif
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
-        if(p!=NULL) {
+        if(p!=nullptr) {
             if(length>0) {
                 if(length>capacity) {
                     length=capacity;
@@ -487,7 +525,7 @@ inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t
         }
         return p;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -497,7 +535,7 @@ inline T *MaybeStackArray<T, stackCapacity>::orphanOrClone(int32_t length, int32
     if(needToRelease) {
         p=ptr;
     } else if(length<=0) {
-        return NULL;
+        return nullptr;
     } else {
         if(length>capacity) {
             length=capacity;
@@ -506,8 +544,8 @@ inline T *MaybeStackArray<T, stackCapacity>::orphanOrClone(int32_t length, int32
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
       ::fprintf(::stderr,"MaybeStacArray (orphan) alloc %d * %lu\n", length,sizeof(T));
 #endif
-        if(p==NULL) {
-            return NULL;
+        if(p==nullptr) {
+            return nullptr;
         }
         uprv_memcpy(p, ptr, (size_t)length*sizeof(T));
     }
@@ -580,11 +618,11 @@ public:
     /**
      * Deletes the memory block (if owned) and aliases another one, no transfer of ownership.
      * If the arguments are illegal, then the current memory is unchanged.
-     * @param otherArray must not be NULL
+     * @param otherArray must not be nullptr
      * @param otherCapacity must be >0
      */
     void aliasInstead(H *otherMemory, int32_t otherCapacity) {
-        if(otherMemory!=NULL && otherCapacity>0) {
+        if(otherMemory!=nullptr && otherCapacity>0) {
             releaseMemory();
             ptr=otherMemory;
             capacity=otherCapacity;
@@ -596,17 +634,17 @@ public:
      * copying the header and length T array items.
      * Returns the new header pointer.
      * If the allocation fails, then the current memory is unchanged and
-     * this method returns NULL.
+     * this method returns nullptr.
      * @param newCapacity can be less than or greater than the current capacity;
      *                    must be >0
      * @param length number of T items to be copied from the old array to the new one
-     * @return the allocated pointer, or NULL if the allocation failed
+     * @return the allocated pointer, or nullptr if the allocation failed
      */
     inline H *resize(int32_t newCapacity, int32_t length=0);
     /**
      * Gives up ownership of the memory if owned, or else clones it,
      * copying the header and length T array items; resets itself to the internal memory.
-     * Returns NULL if the allocation failed.
+     * Returns nullptr if the allocation failed.
      * @param length number of T items to copy when cloning,
      *        and array capacity of the clone when cloning
      * @param resultCapacity will be set to the returned array's capacity (output-only)
@@ -642,7 +680,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapac
       ::fprintf(::stderr,"MaybeStackHeaderAndArray alloc %d + %d * %ul\n", sizeof(H),newCapacity,sizeof(T));
 #endif
         H *p=(H *)uprv_malloc(sizeof(H)+newCapacity*sizeof(T));
-        if(p!=NULL) {
+        if(p!=nullptr) {
             if(length<0) {
                 length=0;
             } else if(length>0) {
@@ -661,7 +699,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapac
         }
         return p;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -681,8 +719,8 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
       ::fprintf(::stderr,"MaybeStackHeaderAndArray (orphan) alloc %ul + %d * %lu\n", sizeof(H),length,sizeof(T));
 #endif
         p=(H *)uprv_malloc(sizeof(H)+length*sizeof(T));
-        if(p==NULL) {
-            return NULL;
+        if(p==nullptr) {
+            return nullptr;
         }
         uprv_memcpy(p, ptr, sizeof(H)+(size_t)length*sizeof(T));
     }

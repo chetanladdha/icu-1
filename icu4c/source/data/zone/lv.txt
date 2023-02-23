@@ -258,6 +258,9 @@ lv{
         "America:Chihuahua"{
             ec{"Čivava"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"Huaresa"}
+        }
         "America:Coral_Harbour"{
             ec{"Atikokana"}
         }
@@ -867,6 +870,9 @@ lv{
         "Asia:Ulaanbaatar"{
             ec{"Ulanbatora"}
         }
+        "Asia:Urumqi"{
+            ec{"Urumči"}
+        }
         "Asia:Ust-Nera"{
             ec{"Ustjņera"}
         }
@@ -1219,6 +1225,9 @@ lv{
         }
         "Pacific:Johnston"{
             ec{"Džonstona atols"}
+        }
+        "Pacific:Kanton"{
+            ec{"Kantona"}
         }
         "Pacific:Kiritimati"{
             ec{"Kirisimasi"}
@@ -1903,6 +1912,9 @@ lv{
             ld{"Jekaterinburgas vasaras laiks"}
             lg{"Jekaterinburgas laiks"}
             ls{"Jekaterinburgas ziemas laiks"}
+        }
+        "meta:Yukon"{
+            ls{"Jukonas laiks"}
         }
         fallbackFormat{"{0} ({1})"}
         gmtFormat{"GMT{0}"}

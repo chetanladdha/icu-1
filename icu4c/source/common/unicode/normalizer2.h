@@ -92,7 +92,7 @@ public:
 
     /**
      * Returns a Normalizer2 instance for Unicode NFC normalization.
-     * Same as getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode).
+     * Same as getInstance(nullptr, "nfc", UNORM2_COMPOSE, errorCode).
      * Returns an unmodifiable singleton instance. Do not delete it.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
@@ -106,7 +106,7 @@ public:
 
     /**
      * Returns a Normalizer2 instance for Unicode NFD normalization.
-     * Same as getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode).
+     * Same as getInstance(nullptr, "nfc", UNORM2_DECOMPOSE, errorCode).
      * Returns an unmodifiable singleton instance. Do not delete it.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
@@ -120,7 +120,7 @@ public:
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKC normalization.
-     * Same as getInstance(NULL, "nfkc", UNORM2_COMPOSE, errorCode).
+     * Same as getInstance(nullptr, "nfkc", UNORM2_COMPOSE, errorCode).
      * Returns an unmodifiable singleton instance. Do not delete it.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
@@ -134,7 +134,7 @@ public:
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKD normalization.
-     * Same as getInstance(NULL, "nfkc", UNORM2_DECOMPOSE, errorCode).
+     * Same as getInstance(nullptr, "nfkc", UNORM2_DECOMPOSE, errorCode).
      * Returns an unmodifiable singleton instance. Do not delete it.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
@@ -148,7 +148,7 @@ public:
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKC_Casefold normalization.
-     * Same as getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode).
+     * Same as getInstance(nullptr, "nfkc_cf", UNORM2_COMPOSE, errorCode).
      * Returns an unmodifiable singleton instance. Do not delete it.
      * @param errorCode Standard ICU error code. Its input value must
      *                  pass the U_SUCCESS() test, or else the function returns
@@ -166,12 +166,12 @@ public:
      * and which composes or decomposes text according to the specified mode.
      * Returns an unmodifiable singleton instance. Do not delete it.
      *
-     * Use packageName=NULL for data files that are part of ICU's own data.
+     * Use packageName=nullptr for data files that are part of ICU's own data.
      * Use name="nfc" and UNORM2_COMPOSE/UNORM2_DECOMPOSE for Unicode standard NFC/NFD.
      * Use name="nfkc" and UNORM2_COMPOSE/UNORM2_DECOMPOSE for Unicode standard NFKC/NFKD.
      * Use name="nfkc_cf" and UNORM2_COMPOSE for Unicode standard NFKC_CF=NFKC_Casefold.
      *
-     * @param packageName NULL for ICU built-in data, otherwise application data package name
+     * @param packageName nullptr for ICU built-in data, otherwise application data package name
      * @param name "nfc" or "nfkc" or "nfkc_cf" or name of custom data file
      * @param mode normalization mode (compose or decompose etc.)
      * @param errorCode Standard ICU error code. Its input value must
@@ -225,10 +225,8 @@ public:
      * Normalizes a UTF-8 string and optionally records how source substrings
      * relate to changed and unchanged result substrings.
      *
-     * Currently implemented completely only for "compose" modes,
-     * such as for NFC, NFKC, and NFKC_Casefold
-     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
-     * Otherwise currently converts to & from UTF-16 and does not support edits.
+     * Implemented completely for all built-in modes except for FCD.
+     * The base class implementation converts to & from UTF-16 and does not support edits.
      *
      * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       Source UTF-8 string.
@@ -381,11 +379,9 @@ public:
      * resolves to "yes" or "no" to provide a definitive result,
      * at the cost of doing more work in those cases.
      *
-     * This works for all normalization modes,
-     * but it is currently optimized for UTF-8 only for "compose" modes,
-     * such as for NFC, NFKC, and NFKC_Casefold
-     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
-     * For other modes it currently converts to UTF-16 and calls isNormalized().
+     * This works for all normalization modes.
+     * It is optimized for UTF-8 for all built-in modes except for FCD.
+     * The base class implementation converts to UTF-16 and calls isNormalized().
      *
      * @param s UTF-8 input string
      * @param errorCode Standard ICU error code. Its input value must
@@ -543,10 +539,8 @@ public:
      * Normalizes a UTF-8 string and optionally records how source substrings
      * relate to changed and unchanged result substrings.
      *
-     * Currently implemented completely only for "compose" modes,
-     * such as for NFC, NFKC, and NFKC_Casefold
-     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
-     * Otherwise currently converts to & from UTF-16 and does not support edits.
+     * Implemented completely for most built-in modes except for FCD.
+     * The base class implementation converts to & from UTF-16 and does not support edits.
      *
      * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       Source UTF-8 string.
@@ -676,11 +670,9 @@ public:
      * resolves to "yes" or "no" to provide a definitive result,
      * at the cost of doing more work in those cases.
      *
-     * This works for all normalization modes,
-     * but it is currently optimized for UTF-8 only for "compose" modes,
-     * such as for NFC, NFKC, and NFKC_Casefold
-     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
-     * For other modes it currently converts to UTF-16 and calls isNormalized().
+     * This works for all normalization modes.
+     * It is optimized for UTF-8 for all built-in modes except for FCD.
+     * The base class implementation converts to UTF-16 and calls isNormalized().
      *
      * @param s UTF-8 input string
      * @param errorCode Standard ICU error code. Its input value must

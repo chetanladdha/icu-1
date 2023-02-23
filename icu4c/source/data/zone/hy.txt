@@ -258,6 +258,9 @@ hy{
         "America:Chihuahua"{
             ec{"Չիուաուա"}
         }
+        "America:Ciudad_Juarez"{
+            ec{"Սյուդադ Խուարես"}
+        }
         "America:Coral_Harbour"{
             ec{"Ատիկոկան"}
         }
@@ -867,6 +870,9 @@ hy{
         "Asia:Ulaanbaatar"{
             ec{"Ուլան Բատոր"}
         }
+        "Asia:Urumqi"{
+            ec{"Ուրումչի"}
+        }
         "Asia:Ust-Nera"{
             ec{"Ուստ-Ներա"}
         }
@@ -1219,6 +1225,9 @@ hy{
         }
         "Pacific:Johnston"{
             ec{"Ջոնսթոն"}
+        }
+        "Pacific:Kanton"{
+            ec{"Կանտոն"}
         }
         "Pacific:Kiritimati"{
             ec{"Կիրիտիմատի"}
@@ -1879,6 +1888,9 @@ hy{
             ld{"Եկատերինբուրգի ամառային ժամանակ"}
             lg{"Եկատերինբուրգի ժամանակ"}
             ls{"Եկատերինբուրգի ստանդարտ ժամանակ"}
+        }
+        "meta:Yukon"{
+            ls{"Յուկոնի ժամանակ"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

@@ -25,7 +25,7 @@ public:
     BasicNormalizerTest();
     virtual ~BasicNormalizerTest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     void TestHangulCompose(void);
     void TestHangulDecomp(void);
@@ -47,7 +47,8 @@ public:
     void TestCustomComp();
     void TestCustomFCC();
     void TestFilteredNormalizer2Coverage();
-    void TestNormalizeUTF8WithEdits();
+    void TestComposeUTF8WithEdits();
+    void TestDecomposeUTF8WithEdits();
     void TestLowMappingToEmpty_D();
     void TestLowMappingToEmpty_FCD();
     void TestNormalizeIllFormedText();
@@ -60,7 +61,7 @@ private:
     UnicodeString hangulCanon[2][3];
 
     void
-    TestPreviousNext(const UChar *src, int32_t srcLength,
+    TestPreviousNext(const char16_t *src, int32_t srcLength,
                      const UChar32 *expext, int32_t expectLength,
                      const int32_t *expectIndex, // its length=expectLength+1
                      int32_t srcMiddle, int32_t expectMiddle,
@@ -85,7 +86,7 @@ private:
              Normalizer* result,
              const UnicodeString& errPrefix);
 
-    static UnicodeString hex(UChar ch);
+    static UnicodeString hex(char16_t ch);
     static UnicodeString hex(const UnicodeString& str);
 
     void checkLowMappingToEmpty(const Normalizer2 &n2);

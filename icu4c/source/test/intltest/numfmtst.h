@@ -37,7 +37,7 @@ struct NumberFormatTest_Attributes {
  */
 class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
   public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
     void TestNumberFormatTestTuple();
     void TestDataDrivenICU4C();
 
@@ -45,19 +45,19 @@ class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
     UBool isFormatPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isToPatternPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isParsePass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isParseCurrencyPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
 };
 
 /**
@@ -66,7 +66,7 @@ class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
 class NumberFormatTest: public CalendarTimeZoneTest {
 
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
  public:
 
     /**
@@ -303,12 +303,17 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test20961_CurrencyPluralPattern();
     void Test21134_ToNumberFormatter();
     void Test13733_StrictAndLenient();
+    void Test20425_IntegerIncrement();
+    void Test20425_FractionWithIntegerIncrement();
     void Test21232_ParseTimeout();
+    void Test10997_FormatCurrency();
+    void Test21556_CurrencyAsDecimal();
+    void Test22088_Ethiopic();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
 
-    void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, double amount, const char *text);
+    void expectParseCurrency(const NumberFormat &fmt, const char16_t* currency, double amount, const char *text);
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
 
@@ -339,10 +344,10 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     }
 
     void expect(NumberFormat& fmt, const Formattable& n,
-                const UnicodeString& exp, UBool rt=TRUE);
+                const UnicodeString& exp, UBool rt=true);
 
     void expect(NumberFormat& fmt, const Formattable& n,
-                const char *exp, UBool rt=TRUE) {
+                const char *exp, UBool rt=true) {
         expect(fmt, n, UnicodeString(exp, ""), rt);
     }
 
@@ -356,22 +361,22 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void expect(NumberFormat* fmt, const Formattable& n,
                 const UnicodeString& exp, UErrorCode errorCode) {
-        expect(fmt, n, exp, TRUE, errorCode);
+        expect(fmt, n, exp, true, errorCode);
     }
 
     void expect(NumberFormat* fmt, const Formattable& n,
                 const char *exp, UErrorCode errorCode) {
-        expect(fmt, n, UnicodeString(exp, ""), TRUE, errorCode);
+        expect(fmt, n, UnicodeString(exp, ""), true, errorCode);
     }
 
     void expectCurrency(NumberFormat& nf, const Locale& locale,
                         double value, const UnicodeString& string);
 
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                   int32_t pos, int32_t width, UChar pad);
+                   int32_t pos, int32_t width, char16_t pad);
 
     void expectPad(DecimalFormat& fmt, const char *pat,
-                   int32_t pos, int32_t width, UChar pad) {
+                   int32_t pos, int32_t width, char16_t pad) {
         expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
     }
 
@@ -394,13 +399,13 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void expectPad(DecimalFormat& fmt, const char *pat,
                    int32_t pos) {
-        expectPad(fmt, pat, pos, 0, (UChar)0);
+        expectPad(fmt, pat, pos, 0, (char16_t)0);
     }
 
     void expect_rbnf(NumberFormat& fmt, const UnicodeString& str, const Formattable& n);
 
     void expect_rbnf(NumberFormat& fmt, const Formattable& n,
-                const UnicodeString& exp, UBool rt=TRUE);
+                const UnicodeString& exp, UBool rt=true);
 
     // internal utility routine
     static UnicodeString& escape(UnicodeString& s);

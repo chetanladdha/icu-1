@@ -1108,7 +1108,7 @@ id{
             "Franc UIC Perancis",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "Franc CFA Afrika Barat",
         }
         XPD{
@@ -1618,6 +1618,9 @@ id{
         }
         LRD{
             other{"Dolar Liberia"}
+        }
+        LSL{
+            other{"Loti Lesotho"}
         }
         LTL{
             other{"Litas Lituania"}

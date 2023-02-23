@@ -38,8 +38,8 @@
  *                 certain functions do not throw any exceptions
  *
  *         UMemory operator new methods should have the throw() specification 
- *         appended to them, so that the compiler adds the additional NULL check 
- *         before calling constructors. Without, if <code>operator new</code> returns NULL the 
+ *         appended to them, so that the compiler adds the additional nullptr check 
+ *         before calling constructors. Without, if <code>operator new</code> returns nullptr the
  *         constructor is still called, and if the constructor references member 
  *         data, (which it typically does), the result is a segmentation violation.
  *
@@ -262,8 +262,8 @@ protected:
     // UObject &operator=(const UObject &other) { return *this; }
 
     // comparison operators
-    virtual inline UBool operator==(const UObject &other) const { return this==&other; }
-    inline UBool operator!=(const UObject &other) const { return !operator==(other); }
+    virtual inline bool operator==(const UObject &other) const { return this==&other; }
+    inline bool operator!=(const UObject &other) const { return !operator==(other); }
 
     // clone() commented out from the base class:
     // some compilers do not support co-variant return types
