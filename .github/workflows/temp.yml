@@ -3,7 +3,7 @@ name: Merge ICU upstream changes
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   merge-upstream:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: main
+          ref: master
 
       - name: Merge upstream changes
         run: |
