@@ -1,0 +1,25 @@
+name: Merge ICU upstream changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  merge-upstream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Merge upstream changes
+        run: |
+          git remote add upstream https://github.com/unicode-org/icu.git
+          git fetch upstream
+          git merge --allow-unrelated-histories --strategy-option=theirs upstream/main
+          git add icu4c
+          git commit -m "Adding latest changes"
+          git push
