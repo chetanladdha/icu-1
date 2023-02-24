@@ -22,6 +22,7 @@ jobs:
           git remote add upstream https://github.com/unicode-org/icu.git
           git fetch upstream
           git merge --allow-unrelated-histories --strategy-option=theirs upstream/main
+          continue-on-error: true
           git add icu4c
           git commit -m "Adding latest changes"
           git push
