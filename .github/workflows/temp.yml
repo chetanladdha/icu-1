@@ -21,8 +21,9 @@ jobs:
           git config --global user.name "Bot Auto Commit"
           git remote add upstream https://github.com/unicode-org/icu.git
           git fetch upstream
-          git merge --allow-unrelated-histories --strategy-option=theirs upstream/main
-          continue-on-error: true
+          git merge --allow-unrelated-histories --strategy-option=theirs upstream/main || true
+          
           git add icu4c
           git commit -m "Adding latest changes"
           git push
+        continue-on-error: true
