@@ -2,7 +2,7 @@ name: Merge ICU upstream changes every 2 minutes
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
+    - cron: "*/2000 * * * *"
 
 jobs:
   merge-upstream:
