@@ -18,7 +18,7 @@ jobs:
       - name: Merge upstream changes
         run: |
           git config --global user.email "chetan.laddga@gmail.com"
-          git config --global user.name "GitHub Bot Auto Commit"
+          git config --global user.name "GitHub Bot Auto Commit Performed"
           git remote add upstream https://github.com/unicode-org/icu.git
           git fetch upstream
           git merge --allow-unrelated-histories --strategy-option=theirs upstream/main || true
